@@ -49,17 +49,19 @@ class _TabsScreenState extends State<TabsScreen> {
     });
   }
 
-  void _setScreen(String identifier){
+  void _setScreen(String identifier) async {
     Navigator.of(context).pop();
 
     if (identifier == 'filters') {
-      Navigator.of(context).push(
+      final result = await Navigator.of(context).push<Map<Filter, bool>>(
         MaterialPageRoute(
           builder: (ctx) {
             return const FiltersScreen();
           },
         ),
       );
+
+      print(result);
     }
   }
 
@@ -68,6 +70,7 @@ class _TabsScreenState extends State<TabsScreen> {
     Widget activePage = CategoriesScreen(
       onToggleFavorite: _toggleMealFavoriteStatus,
     );  
+    
     var activePageTitle = 'Categories';
 
     if (_selectedPageIndex == 1) {
