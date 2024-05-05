@@ -6,7 +6,7 @@ import 'package:meals_app/providers/favorites_provider.dart';
 class MealDetailsScreen extends ConsumerWidget {
   const MealDetailsScreen({
     super.key,
-    required this.meal, 
+    required this.meal,
   });
 
   final Meal meal;
@@ -22,8 +22,17 @@ class MealDetailsScreen extends ConsumerWidget {
         title: Text(meal.title),
         actions: [
           IconButton(
-            icon: Icon(
-              isFavorite ? Icons.star : Icons.star_border,
+            icon: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (child, animation) {
+                return RotationTransition(
+                  turns: animation,
+                  child: child,
+                );
+              },
+              child: Icon(
+                isFavorite ? Icons.star : Icons.star_border,
+              ),
             ),
             onPressed: () {
               final wasAdded = ref
@@ -32,7 +41,9 @@ class MealDetailsScreen extends ConsumerWidget {
               ScaffoldMessenger.of(context).clearSnackBars();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(wasAdded ? 'Added to favorites!' : 'Removed from favorites!'),
+                  content: Text(wasAdded
+                      ? 'Added to favorites!'
+                      : 'Removed from favorites!'),
                 ),
               );
             },
@@ -52,36 +63,35 @@ class MealDetailsScreen extends ConsumerWidget {
             Text(
               'Ingredients',
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.bold
-              ),
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 14),
             for (final ingredient in meal.ingredients)
               Text(
                 ingredient,
                 style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  color: Theme.of(context).colorScheme.onBackground,
-                ),
+                      color: Theme.of(context).colorScheme.onBackground,
+                    ),
               ),
             const SizedBox(height: 24),
             Text(
               'Steps',
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.bold
-              ),
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 14),
             for (final step in meal.steps)
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 child: Text(
                   step,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
-                  ),
+                        color: Theme.of(context).colorScheme.onBackground,
+                      ),
                 ),
               ),
           ],
